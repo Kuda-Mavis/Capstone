@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Simulation</title>
+    <link rel="stylesheet" href="assets/Style.css" />
+  </head>
+
+  <body>
+    <section class="agents-section">
+      <div class="instructions-box">
+        <h2>Simulation Guide</h2>
+        <ol>
+          <li>
+            Select the <strong>Agent Profiles</strong> button provided to
+            display the list of all available agents.
+          </li>
+          <li>
+            Drag and drop two agents into the
+            <strong>Simulation Area</strong> to initiate the simulation setup.
+          </li>
+          <li>
+            The <strong>Simulation Area</strong> will display the added agents
+            in clear and descriptive sentences.
+          </li>
+          <li>
+            Once you drag and drop any two agents into the Simulation Area, the
+            <strong>Simulate</strong> button will activate automatically,
+            enabling the interaction process to begin.
+          </li>
+          <li>
+            Once ready, select <strong>Simulate</strong> to start the
+            interaction and reveal available actions.
+          </li>
+        </ol>
+      </div>
+
+      <!-- Agent toggle -->
+      <input type="checkbox" id="toggle-agents" hidden />
+      <label for="toggle-agents" class="agents-btn">Agent Profiles</label>
+
+      <!-- Agent Cards -->
+      <div class="agent-grid">
+        <div class="agent-card" draggable="true">
+          <div class="agent-name">Alice</div>
+          <div class="role">Initiator</div>
+        </div>
+        <div class="agent-card" draggable="true">
+          <div class="agent-name">Bob</div>
+          <div class="role">Responder</div>
+        </div>
+        <div class="agent-card" draggable="true">
+          <div class="agent-name">Server</div>
+          <div class="role">Trusted Authority</div>
+        </div>
+        <div class="agent-card" draggable="true">
+          <div class="agent-name">Eve</div>
+          <div class="role">Attacker</div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <button class="agents-btn" id="simulate-btn" disabled>Simulate</button>
+      <button class="agents-btn" id="undo-btn" style="display: none">
+        Undo
+      </button>
+
+      <!-- Action Buttons (hidden until simulation starts) -->
+      <div id="action-buttons" style="display: none">
+        <button class="agents-btn">Pair</button>
+        <button class="agents-btn">Unpair</button>
+        <button class="agents-btn">Encrypt</button>
+        <button class="agents-btn">Decrypt</button>
+      </div>
+
+      <!-- Simulation Area -->
+      <div class="simulation-area" id="simulation-area">
+        <h3>Simulation Area</h3>
+        <p class="drop-message" id="drop-message">
+          Drag agents here to begin simulation.
+        </p>
+        <div class="agent-name-list" id="agent-name-list"></div>
+      </div>
+    </section>
+
+    <!-- JS Logic -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const simulationArea = document.getElementById("simulation-area");
+        const nameList = document.getElementById("agent-name-list");
+        const undoBtn = document.getElementById("undo-btn");
+        const simulateBtn = document.getElementById("simulate-btn");
+        const actionButtons = document.getElementById("action-buttons");
+        const dropMessage = document.getElementById("drop-message");
+
+        let draggedAgent = null;
+        let droppedAgents = [];
+
+        // Drag start
+        document.querySelectorAll(".agent-card").forEach((card) => {
+          card.addEventListener("dragstart", () => {
+            draggedAgent = card;
+          });
+        });
+
+        // Allow drop
+        simulationArea.addEventListener("dragover", (e) => e.preventDefault());
+
+        // Handle drop
+        simulationArea.addEventListener("drop", (e) => {
+          e.preventDefault();
+          if (draggedAgent) {
+            const name = draggedAgent.querySelector(".agent-name").textContent;
+            if (!droppedAgents.includes(name)) {
+              droppedAgents.push(name);
+              displaySentence(name);
+              undoBtn.style.display = "inline-block";
+              dropMessage.style.display = "none";
+              updateSimulateButton();
+            }
+          }
+        });
+
+        // Undo last action
+        undoBtn.addEventListener("click", () => {
+          if (droppedAgents.length > 0) {
+            droppedAgents.pop();
+            updateSentences();
+            updateSimulateButton();
+
+            if (droppedAgents.length === 0) {
+              dropMessage.style.display = "block";
+              undoBtn.style.display = "none";
+            }
+          }
+        });
+
+        // Simulate button
+        simulateBtn.addEventListener("click", () => {
+          if (droppedAgents.length >= 2) {
+            actionButtons.style.display = "block";
+            const agentList = droppedAgents.join(" and ");
+            nameList.innerHTML = `<p><strong>Simulation is happening between ${agentList}.</strong></p>`;
+          }
+        });
+
+        // Display agent addition as sentence
+        function displaySentence(name) {
+          const sentence = document.createElement("p");
+          sentence.textContent = `${name} has been added to the simulation area.`;
+          sentence.style.opacity = 0;
+          sentence.style.transition = "opacity 0.6s ease";
+          nameList.appendChild(sentence);
+          setTimeout(() => (sentence.style.opacity = 1), 100);
+        }
+
+        // Update displayed sentences when undo is used
+        function updateSentences() {
+          nameList.innerHTML = "";
+          droppedAgents.forEach((agent) => {
+            const sentence = document.createElement("p");
+            sentence.textContent = `${agent} has been added to the simulation area.`;
+            nameList.appendChild(sentence);
+          });
+        }
+
+        // Enable Simulate button only when Alice and Bob are both added
+        function updateSimulateButton() {
+          const hasAlice = droppedAgents.includes("Alice");
+          const hasBob = droppedAgents.includes("Bob");
+          simulateBtn.disabled = !(hasAlice && hasBob);
+          if (!(hasAlice && hasBob)) actionButtons.style.display = "none";
+        }
+      });
+    </script>
+
+    <!-- Button click animation -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".agents-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            btn.classList.add("clicked");
+            setTimeout(() => btn.classList.remove("clicked"), 500);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

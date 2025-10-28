@@ -1,0 +1,211 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+.agents-btn {
+  display: inline-block;
+  padding: 12px 25px;
+  font-size: 1rem;
+  color: white;
+  background-color: #0072b2;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px 10px;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.agents-btn:hover {
+  background-color: #e69f00;
+  transform: scale(1.05);
+}
+
+.agents-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.instructions-box {
+  max-width: 750px;
+  margin: 30px auto 25px;
+  background: linear-gradient(145deg, #eaf3fb, #ffffff);
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  border-left: 6px solid #0072b2;
+}
+
+.instructions-box h2 {
+  margin-top: 0;
+  color: #0072b2;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.instructions-box ol {
+  margin: 15px 0 0 0;
+  padding-left: 20px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.instructions-box li {
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.instructions-box strong {
+  color: #007acc;
+}
+
+.agent-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  max-width: 900px;
+  margin: 0 auto 30px;
+}
+
+.agent-card {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.agent-card:hover {
+  transform: scale(1.08);
+  background-color: #0072b2;
+}
+
+.agent-name {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+  transition: opacity 0.3s ease;
+}
+
+.role {
+  position: absolute;
+  font-size: 0.8rem;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.agent-card:hover .agent-name {
+  opacity: 0;
+}
+
+.agent-card:hover .role {
+  opacity: 1;
+}
+
+.simulation-area {
+  margin: 30px auto;
+  padding: 20px;
+  border: 2px dashed #333;
+  min-height: 320px; /* smaller height */
+  background-color: #f0f0f0;
+  max-width: 750px; /* narrower box */
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.drop-message {
+  font-size: 0.95rem;
+  color: #0072b2;
+  font-weight: bold;
+}
+
+.dropped-agent {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  width: 100px;
+  background-color: #f8f8f8;
+}
+
+#action-buttons {
+  margin-top: 20px;
+}
+/* Hide the agent grid by default */
+.agent-grid {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  max-width: 900px;
+  margin: 0 auto 30px;
+}
+
+/* When checkbox is checked, show the agent grid */
+#toggle-agents:checked ~ .agent-grid {
+  display: flex;
+}
+/* Improve readability and alignment of instruction text */
+.instructions-box ol {
+  margin: 15px 0 0 0;
+  padding-left: 25px;
+  color: #333;
+  line-height: 1.7; /* more vertical breathing space */
+  text-align: justify; /* aligns sentences neatly */
+}
+
+.instructions-box li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  list-style-position: outside; /* keeps bullets aligned */
+}
+
+/* Optional accessibility enhancement for strong text */
+.instructions-box strong {
+  color: #007acc; /* friendly blue (accessible contrast) */
+  font-weight: 600;
+}
+
+/* Optional: Add gentle hover highlight for buttons for clarity */
+.agents-btn:focus,
+.agents-btn:hover {
+  outline: none;
+  background-color: #005a9c; /* darker blue for better contrast */
+  transform: scale(1.05);
+}
+
+/* Optional: Make the simulation area feel more active when hovered */
+.simulation-area:hover {
+  border-color: #007acc;
+  background-color: #f7fbff;
+  box-shadow: 0 0 10px rgba(0, 114, 178, 0.2);
+}
+
+.instructions-box strong {
+  display: inline-block;
+}
+/* When buttons like Simulate, Undo, etc. are clicked */
+.agents-btn:active {
+  background-color: #e69f00; /* orange */
+  transform: scale(0.98); /* subtle press effect */
+}
+.agents-btn.clicked {
+  background-color: #e69f00 !important;
+  transform: scale(0.98);
+  transition: background-color 0.4s ease;
+}
